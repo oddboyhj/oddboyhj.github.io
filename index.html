@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            border: 0;
+            appearance: none;
+            resize: none;
+            font-family: 'Pretendard Variable', Pretendard, san-serif;
+        }
+
+        body {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 100px;
+            margin-bottom: 60px;
+        }
+
+        .tistory,
+        .original {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: calc(100% - 20px);
+            max-width: 630px;
+            margin: 0 auto 20px;
+            border: 1px solid #222;
+        }
+
+        .original {
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+
+        .txt {
+            font-size: 14px;
+            margin-bottom: 40px;
+            color: #bbb;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            height: 20px;
+            margin: 10px auto;
+            font-size: 15px;
+            line-height: 180%;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            background-color: #111;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        button.none {
+            background-color: #aaa !important;
+        }
+
+        button.resetbtn {
+            width: calc(100% - 20px);
+            max-width: 628px;
+            background-color: #00f;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>티스토리 원본 링크 찾기</h1>
+    <p class="txt">이미지 링크는 하나씩 넣어주세요</p>
+    <div class="tistory">
+        <input name="tistoryurl" id="tistoryurl">
+        <button class="tistorybtn">이미지 링크 변환</button>
+    </div>
+    <div class="original">
+        <input name="origurl" id="origurl">
+        <button class="originalbtn none" style="pointer-events:none;">원본 링크 복사</button>
+    </div>
+    <button class="resetbtn">초기화 하기</button>
+</body>
+
+<script>
+    $(function () {
+        $('.tistorybtn').click(function () {
+            if ($('#tistoryurl').val() == '') {
+                alert('원본 링크를 찾을 이미지 링크를 넣어주세요.');
+            } else {
+                var tiurl = $('#tistoryurl').val();
+                var num = tiurl.indexOf('&fname=');
+                if (num == -1) {
+                    alert('올바른 링크가 아닙니다.');
+                    $('#tistoryurl').val('');
+                } else {
+                    var secondurl = tiurl.replace(tiurl.substring('0', num + 7), '');
+                    var origurl = decodeURIComponent(secondurl);
+
+                    $('.originalbtn').css('pointer-events', 'auto').removeClass('none');
+                    $('#origurl').val(origurl);
+                }
+            }
+        });
+
+        $('.originalbtn').click(function () {
+            navigator.clipboard.writeText($('#origurl').val());
+            alert('원본 링크가 클립보드에 복사되었습니다.');
+        });
+
+        $('.resetbtn').click(function () {
+            $('#tistoryurl').val('');
+            $('#origurl').val('');
+            $('.originalbtn').css('pointer-events', 'none').addClass('none');
+        });
+    });
+</script>
+
+</html>
